@@ -1,17 +1,60 @@
 body {
-  font-family: sans-serif;
+  font-family: system-ui, sans-serif;
   background: #f4f4f4;
   color: #222;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2em;
+  margin: 0;
+  padding: 0;
 }
-main {
-  background: white;
+
+main, section {
+  max-width: 640px;
+  margin: 4em auto;
   padding: 2em;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  max-width: 600px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.08);
+}
+
+h1, h2 {
+  color: #1f3b3f;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 1em;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
   width: 100%;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  background-color: #1f3b3f;
+  color: white;
+  border: none;
+  padding: 0.75em 1.25em;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1.5em;
+}
+
+button:hover {
+  background-color: #35595d;
+}
+
+section {
+  display: none;
+}
+
+section.active {
+  display: block;
 }
