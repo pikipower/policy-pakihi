@@ -88,23 +88,13 @@
 
 <section>
   <h2>Your policy kete is ready – Kua rite tō kete</h2>
-  <p>This is a preview. Download will be available soon.</p>
-  <button disabled>Download Kete</button>
+  <p>Click below to download your policy kete as a Word document.</p>
+  <button onclick="downloadDocx()">Download Kete</button>
 </section>
 
-<script>
-  let currentStep = 0;
-  const sections = document.querySelectorAll('section');
-
-  function nextStep() {
-    if (currentStep < sections.length - 1) {
-      sections[currentStep].classList.remove('active');
-      currentStep++;
-      sections[currentStep].classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-</script>
+<!-- DOCX + Custom Scripts -->
+<script src="https://unpkg.com/docx@7.7.0/build/index.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
