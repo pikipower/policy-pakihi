@@ -2,14 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Policy Pakihi</title>
+  <title>Policy Pakihi – Kete Builder</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    section {
+      display: none;
+      max-width: 600px;
+      background: white;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: 4em auto;
+    }
+    section.active {
+      display: block;
+    }
+    button {
+      margin-top: 1em;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin: 0.5em 0 1em;
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <h1>Welcome to Policy Pakihi</h1>
-    <p>This kete builder is coming soon...</p>
-  </main>
-  <script src="script.js"></script>
+
+<section class="active">
+  <h2>Welcome – Nau mai ki Policy Pakihi</h2>
+  <p>This free tool helps you build policy documents aligned with your kaupapa and Aotearoa’s laws. No data is saved.</p>
+  <button onclick="nextStep()">Start Your Policy Journey</button>
+</section>
+
+<section>
+  <h2>Your Rōpū – Te Āhua o tō Rōpū</h2>
+  <label for="roopuType">What kind of organisation are you?</label>
+  <select id="roopuType">
+    <option>Charitable Trust</option>
+    <option>Incorporated Society</option>
+    <option>Community group</option>
+    <option>Hapū, iwi, or kaupapa Māori rōpū</option>
+    <option>Other</option>
+  </select>
+  <button onclick="nextStep()">Next</button>
+</section>
+
+<section>
+  <h2>People Involved – Ngā Tāngata</h2>
+  <label for="paidStaff">How many paid kaimahi?</label>
+  <input type="number" id="paidStaff" min="0">
+  <label for="volunteers">How many volunteers?</label>
+  <input type="number" id="volunteers" min="0">
+  <button onclick="nextStep()">Next</button>
+</section>
+
+<section>
+  <h2>Activities – Ngā Mahi Motuhake</h2>
+  <p>Do you do any of the following?</p>
+  <label><input type="checkbox"> Work with tamariki or vulnerable people</label><br>
+  <label><input type="checkbox"> Fundraise or hold raffles</label><br>
+  <label><input type="checkbox"> Provide financial assistance</label><br>
+  <label><input type="checkbox"> Use volunteers</label><br>
+  <button onclick="nextStep()">Next</button>
+</section>
+
+<section>
+  <h2>Policies – Ngā Kaupapa Here</h2>
+  <p>Based on your answers, we recommend these policies. Add or remove any:</p>
+  <label><input type="checkbox" checked> Governance Responsibilities</label><br>
+  <label><input type="checkbox"> Volunteer Support</label><br>
+  <label><input type="checkbox"> Privacy & Information Use</label><br>
+  <label><input type="checkbox"> Financial Management</label><br>
+  <label><input type="checkbox"> Health & Safety</label><br>
+  <button onclick="nextStep()">Next</button>
+</section>
+
+<section>
+  <h2>Custom Details – Ngā Taipitopito</h2>
+  <label for="orgName">Organisation name</label>
+  <input type="text" id="orgName">
+  <label for="vision">Optional vision/purpose</label>
+  <textarea id="vision"></textarea>
+  <button onclick="nextStep()">Next</button>
+</section>
+
+<section>
+  <h2>Your policy kete is ready – Kua rite tō kete</h2>
+  <p>This is a preview. Download will be available soon.</p>
+  <button disabled>Download Kete</button>
+</section>
+
+<script>
+  let currentStep = 0;
+  const sections = document.querySelectorAll('section');
+
+  function nextStep() {
+    if (currentStep < sections.length - 1) {
+      sections[currentStep].classList.remove('active');
+      currentStep++;
+      sections[currentStep].classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+</script>
+
 </body>
 </html>
