@@ -77,19 +77,53 @@
   <button onclick="nextStep()">Next</button>
 </section>
 
-<section>
-  <h2>Custom Details – Ngā Taipitopito</h2>
-  <label for="orgName">Organisation name</label>
-  <input type="text" id="orgName">
-  <label for="vision">Optional vision/purpose</label>
-  <textarea id="vision"></textarea>
-  <button onclick="nextStep()">Next</button>
-</section>
-
-<section>
-  <h2>Your policy kete is ready – Kua rite tō kete</h2>
-  <p>Click below to download your policy kete as a Word document.</p>
-  <button onclick="downloadDocx()">Download Kete</button>
+<!-- Replace the final section in your index.html -->
+<section x-data="{ downloading: false }">
+  <h2 class="text-xl font-semibold mb-4">Your policy kete is ready – Kua rite tō kete</h2>
+  
+  <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg mb-6">
+    <h3 class="font-medium mb-2">Selected Policies:</h3>
+    <ul class="list-disc pl-5 mb-4">
+      <template x-for="policy in selectedPolicies" :key="policy">
+        <li x-text="policy"></li>
+      </template>
+    </ul>
+    
+    <div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>Your document will be generated as a Word file (.docx) </span>
+    </div>
+  </div>
+  
+  <p class="mb-6">Click below to download your policy kete as a Word document.</p>
+  
+  <button 
+    @click="downloading = true; downloadDocx()" 
+    class="bg-primary text-white hover:bg-secondary px-6 py-3 rounded-lg shadow-md flex items-center justify-center w-full sm:w-auto"
+    :class="{ 'opacity-50 cursor-not-allowed': downloading }"
+    :disabled="downloading">
+    <span x-show="!downloading">Download Kete</span>
+    <span x-show="downloading" class="flex items-center">
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Generating...
+    </span>
+  </button>
+  
+  <div class="mt-8 border-t pt-6">
+    <button 
+      onclick="prevStep() " 
+      class="text-primary hover:text-secondary underline flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to edit selections
+    </button>
+  </div>
 </section>
 
 <!-- DOCX + Custom Scripts -->
