@@ -1,60 +1,36 @@
-body {
-  font-family: system-ui, sans-serif;
-  background: #f4f4f4;
-  color: #222;
-  margin: 0;
-  padding: 0;
-}
+/* Base styles that won't be overridden by Tailwind */
+[x-cloak] { display: none !important; }
 
-main, section {
-  max-width: 640px;
-  margin: 4em auto;
-  padding: 2em;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.08);
-}
-
-h1, h2 {
-  color: #1f3b3f;
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  margin-top: 1em;
-}
-
-input[type="text"],
-input[type="number"],
-select,
-textarea {
-  width: 100%;
-  padding: 0.75em;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-button {
-  background-color: #1f3b3f;
-  color: white;
-  border: none;
-  padding: 0.75em 1.25em;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1.5em;
-}
-
-button:hover {
-  background-color: #35595d;
-}
-
+/* Default section hiding */
 section {
   display: none;
 }
 
 section.active {
   display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Simple animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Dark mode toggle styles */
+.dark-mode-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 50;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+}
+
+.dark .dark-mode-toggle {
+  background-color: #374151;
+  border-color: #4b5563;
 }
