@@ -171,3 +171,34 @@ async function downloadDocx() {
     link.click();
   });
 }
+// Add keyboard navigation
+document.addEventListener('keydown', function(e) {
+  // Only handle navigation keys when not in an input field
+  if (document.activeElement.tagName === 'INPUT' || 
+      document.activeElement.tagName === 'TEXTAREA' || 
+      document.activeElement.tagName === 'SELECT') {
+    return;
+  }
+  
+  // Right arrow or space to go to next step
+  if (e.key === 'ArrowRight' || e.key === ' ') {
+    e.preventDefault();
+    nextStep();
+  }
+  
+  // Left arrow to go to previous step (add this function)
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    prevStep();
+  }
+});
+
+// Add previous step function
+function prevStep() {
+  if (currentStep > 0) {
+    sections[currentStep].classList.remove("active");
+    currentStep--;
+    sections[currentStep].classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
