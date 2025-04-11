@@ -47,6 +47,16 @@
   </style>
 </head>
 <body>
+<!-- Dark Mode Toggle -->
+<button 
+  class="dark-mode-toggle" 
+  x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }"
+  @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode.toString()); document.documentElement.classList.toggle('dark', darkMode)"
+  x-init="document.documentElement.classList.toggle('dark', darkMode)">
+  <span x-show="!darkMode">ð</span>
+  <span x-show="darkMode">âï¸</span>
+</button>
+  
 <!-- Add this right after the opening body tag -->
 <div class="bg-gray-100 dark:bg-gray-800 py-2 mb-6 sticky top-0 z-30 shadow-md">
   <div class="container mx-auto px-4">
@@ -69,9 +79,10 @@
 </div>
 
 <section class="active">
-  <h2>Welcome – Nau mai ki Policy Pakihi</h2>
-  <p>This free tool helps you build policy documents aligned with your kaupapa and Aotearoa’s laws. No data is saved.</p>
-  <button onclick="nextStep()">Start Your Policy Journey</button>
+  <h1 class="text-2xl font-bold text-primary mb-4">Policy Pakihi</h1>
+  <h2 class="text-xl font-semibold mb-2">Welcome Nau mai ki Policy Pakihi</h2>
+  <p>This free tool helps you build policy documents aligned with your kaupapa and Aotearoa's laws. No data is saved.</p>
+  <button onclick="nextStep()" class="mt-4 bg-primary text-white hover:bg-secondary px-4 py-2 rounded">Start Your Policy Journey</button>
 </section>
 
 <section>
@@ -106,15 +117,83 @@
   <button onclick="nextStep()">Next</button>
 </section>
 
-<section>
-  <h2>Policies – Ngā Kaupapa Here</h2>
+<section x-data="{ selectedPolicies: [] }" class="active">
+  <h2>Policies - Ngā Kaupapa</h2>
   <p>Based on your answers, we recommend these policies. Add or remove any:</p>
-  <label><input type="checkbox" checked> Governance Responsibilities</label><br>
-  <label><input type="checkbox"> Volunteer Support</label><br>
-  <label><input type="checkbox"> Privacy & Information Use</label><br>
-  <label><input type="checkbox"> Financial Management</label><br>
-  <label><input type="checkbox"> Health & Safety</label><br>
-  <button onclick="nextStep()">Next</button>
+  
+  <div class="space-y-3">
+    <div class="flex items-center justify-between border p-3 rounded">
+      <label class="flex items-center">
+        <input type="checkbox" checked @change="selectedPolicies = selectedPolicies.includes('Governance Responsibilities') 
+          ? selectedPolicies.filter(p => p !== 'Governance Responsibilities') 
+          : [...selectedPolicies, 'Governance Responsibilities']">
+        <span class="ml-2">Governance Responsibilities</span>
+      </label>
+      <button 
+        @click="previewPolicy('Governance Responsibilities', 'governance.txt')" 
+        class="text-primary hover:text-secondary underline">
+        Preview
+      </button>
+    </div>
+    
+    <div class="flex items-center justify-between border p-3 rounded">
+      <label class="flex items-center">
+        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Volunteer Support') 
+          ? selectedPolicies.filter(p => p !== 'Volunteer Support') 
+          : [...selectedPolicies, 'Volunteer Support']">
+        <span class="ml-2">Volunteer Support</span>
+      </label>
+      <button 
+        @click="previewPolicy('Volunteer Support', 'volunteer.txt')" 
+        class="text-primary hover:text-secondary underline">
+        Preview
+      </button>
+    </div>
+    
+    <div class="flex items-center justify-between border p-3 rounded">
+      <label class="flex items-center">
+        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Privacy & Information Use') 
+          ? selectedPolicies.filter(p => p !== 'Privacy & Information Use') 
+          : [...selectedPolicies, 'Privacy & Information Use']">
+        <span class="ml-2">Privacy & Information Use</span>
+      </label>
+      <button 
+        @click="previewPolicy('Privacy & Information Use', 'privacy.txt')" 
+        class="text-primary hover:text-secondary underline">
+        Preview
+      </button>
+    </div>
+    
+    <div class="flex items-center justify-between border p-3 rounded">
+      <label class="flex items-center">
+        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Financial Management') 
+          ? selectedPolicies.filter(p => p !== 'Financial Management') 
+          : [...selectedPolicies, 'Financial Management']">
+        <span class="ml-2">Financial Management</span>
+      </label>
+      <button 
+        @click="previewPolicy('Financial Management', 'finance.txt')" 
+        class="text-primary hover:text-secondary underline">
+        Preview
+      </button>
+    </div>
+    
+    <div class="flex items-center justify-between border p-3 rounded">
+      <label class="flex items-center">
+        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Health & Safety') 
+          ? selectedPolicies.filter(p => p !== 'Health & Safety') 
+          : [...selectedPolicies, 'Health & Safety']">
+        <span class="ml-2">Health & Safety</span>
+      </label>
+      <button 
+        @click="previewPolicy('Health & Safety', 'health.txt')" 
+        class="text-primary hover:text-secondary underline">
+        Preview
+      </button>
+    </div>
+  </div>
+  
+  <button onclick="nextStep()" class="mt-4 bg-primary text-white hover:bg-secondary px-4 py-2 rounded">Next</button>
 </section>
 
 <!-- Replace the final section in your index.html -->
