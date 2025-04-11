@@ -27,6 +27,26 @@
   </style>
 </head>
 <body>
+<!-- Add this right after the opening body tag -->
+<div class="bg-gray-100 dark:bg-gray-800 py-2 mb-6 sticky top-0 z-30 shadow-md">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center">
+      <h1 class="text-lg font-bold text-primary dark:text-white">Policy Pakihi</h1>
+      
+      <div class="flex space-x-1">
+        <template x-for="(step, index)  in ['Welcome', 'Rōpū', 'People', 'Activities', 'Policies', 'Details', 'Download']" :key="index">
+          <div class="flex items-center">
+            <div 
+              class="w-3 h-3 rounded-full transition-colors duration-300"
+              :class="index === currentStep ? 'bg-primary' : (index < currentStep ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600')">
+            </div>
+            <div x-show="index < 6" class="w-4 h-0.5 bg-gray-300 dark:bg-gray-600"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
 
 <section class="active">
   <h2>Welcome – Nau mai ki Policy Pakihi</h2>
