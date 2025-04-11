@@ -1,285 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Tailwind CSS via CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<!-- Alpine.js via CDN -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-<!-- Custom Tailwind configuration -->
-<script>
-  tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        colors: {
-          primary: '#1f3b3f',
-          secondary: '#35595d',
-        }
-      }
-    }
-  }
-</script>
   <meta charset="UTF-8">
   <title>Policy Pakihi – Kete Builder</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#5A7A4E',      // Kawakawa green
+            secondary: '#3F5D45',    // Forest accent
+            background: '#F5F5F5',   // Soft grey background
+            text: '#333333',         // Main text
+            accent: '#999999',       // Accent grey
+          }
+        }
+      }
+    };
+  </script>
+
   <link rel="stylesheet" href="styles.css">
-  <style>
-    section {
-      display: none;
-      max-width: 600px;
-      background: white;
-      padding: 2em;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin: 4em auto;
-    }
-    section.active {
-      display: block;
-    }
-    button {
-      margin-top: 1em;
-    }
-    input, select, textarea {
-      width: 100%;
-      margin: 0.5em 0 1em;
-    }
-  </style>
 </head>
-<body>
-<!-- Dark Mode Toggle -->
-<button 
-  class="dark-mode-toggle" 
-  x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }"
-  @click="darkMode = !darkMode; localStorage.setItem('darkMode', darkMode.toString()); document.documentElement.classList.toggle('dark', darkMode)"
-  x-init="document.documentElement.classList.toggle('dark', darkMode)">
-  <span x-show="!darkMode">ð</span>
-  <span x-show="darkMode">âï¸</span>
-</button>
-  
-<!-- Add this right after the opening body tag -->
-<div class="bg-gray-100 dark:bg-gray-800 py-2 mb-6 sticky top-0 z-30 shadow-md">
-  <div class="container mx-auto px-4">
-    <div class="flex justify-between items-center">
-      <h1 class="text-lg font-bold text-primary dark:text-white">Policy Pakihi</h1>
-      
+
+<body class="bg-background text-text font-sans">
+
+  <!-- Header / Progress -->
+  <header class="bg-white shadow sticky top-0 z-20 py-4">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-primary">Policy Pakihi</h1>
       <div class="flex space-x-1">
-        <template x-for="(step, index)  in ['Welcome', 'Rōpū', 'People', 'Activities', 'Policies', 'Details', 'Download']" :key="index">
-          <div class="flex items-center">
-            <div 
-              class="w-3 h-3 rounded-full transition-colors duration-300"
-              :class="index === currentStep ? 'bg-primary' : (index < currentStep ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600')">
+        <template x-data="{ currentStep: 0 }" x-init="$watch('currentStep', val => window.currentStep = val)">
+          <template x-for="(step, index) in ['Welcome', 'Rōpū', 'People', 'Activities', 'Policies', 'Details', 'Download']">
+            <div class="flex items-center">
+              <div :class="{
+                'bg-primary': index === currentStep,
+                'bg-secondary': index < currentStep,
+                'bg-accent': index > currentStep
+              }" class="w-3 h-3 rounded-full transition-colors duration-300"></div>
+              <div x-show="index < 6" class="w-4 h-0.5 bg-accent"></div>
             </div>
-            <div x-show="index < 6" class="w-4 h-0.5 bg-gray-300 dark:bg-gray-600"></div>
-          </div>
+          </template>
         </template>
       </div>
     </div>
-  </div>
-</div>
+  </header>
 
-<section class="active">
-  <h1 class="text-2xl font-bold text-primary mb-4">Policy Pakihi</h1>
-  <h2 class="text-xl font-semibold mb-2">Welcome Nau mai ki Policy Pakihi</h2>
-  <p>This free tool helps you build policy documents aligned with your kaupapa and Aotearoa's laws. No data is saved.</p>
-  <button onclick="nextStep()" class="mt-4 bg-primary text-white hover:bg-secondary px-4 py-2 rounded">Start Your Policy Journey</button>
-</section>
+  <!-- Main Content -->
+  <main id="steps" class="container mx-auto p-6 space-y-10">
 
-<section>
-  <h2>Your Rōpū – Te Āhua o tō Rōpū</h2>
-  <label for="roopuType">What kind of organisation are you?</label>
-  <select id="roopuType">
-    <option>Charitable Trust</option>
-    <option>Incorporated Society</option>
-    <option>Community group</option>
-    <option>Hapū, iwi, or kaupapa Māori rōpū</option>
-    <option>Other</option>
-  </select>
-  <button onclick="nextStep()">Next</button>
-</section>
+    <!-- Welcome -->
+    <section class="step active bg-white p-6 rounded-md shadow-sm border border-gray-200">
+      <h2 class="text-2xl font-bold text-primary mb-2">Nau mai – Welcome</h2>
+      <p>This free tool helps you build policy documents aligned with your kaupapa and Aotearoa’s laws. No data is saved.</p>
+      <button onclick="nextStep()" class="mt-4 bg-primary text-white hover:bg-secondary px-6 py-2 rounded-md">Start Your Policy Journey</button>
+    </section>
 
-<section>
-  <h2>People Involved – Ngā Tāngata</h2>
-  <label for="paidStaff">How many paid kaimahi?</label>
-  <input type="number" id="paidStaff" min="0">
-  <label for="volunteers">How many volunteers?</label>
-  <input type="number" id="volunteers" min="0">
-  <button onclick="nextStep()">Next</button>
-</section>
+    <!-- Rōpū Type -->
+    <section class="step bg-white p-6 rounded-md shadow-sm border border-gray-200">
+      <h2 class="text-xl font-semibold mb-2">Te Āhua o tō Rōpū – Your Organisation Type</h2>
+      <label class="block mb-1" for="roopuType">What kind of organisation are you?</label>
+      <select id="roopuType" class="w-full p-2 border border-accent rounded">
+        <option>Charitable Trust</option>
+        <option>Incorporated Society</option>
+        <option>Community group</option>
+        <option>Hapū, iwi, or kaupapa Māori rōpū</option>
+        <option>Other</option>
+      </select>
+      <button onclick="nextStep()" class="mt-4 bg-primary text-white px-6 py-2 rounded-md">Next</button>
+    </section>
 
-<section>
-  <h2>Activities – Ngā Mahi Motuhake</h2>
-  <p>Do you do any of the following?</p>
-  <label><input type="checkbox"> Work with tamariki or vulnerable people</label><br>
-  <label><input type="checkbox"> Fundraise or hold raffles</label><br>
-  <label><input type="checkbox"> Provide financial assistance</label><br>
-  <label><input type="checkbox"> Use volunteers</label><br>
-  <button onclick="nextStep()">Next</button>
-</section>
+    <!-- People -->
+    <section class="step bg-white p-6 rounded-md shadow-sm border border-gray-200">
+      <h2 class="text-xl font-semibold mb-2">Ngā Tāngata – People Involved</h2>
+      <label for="paidStaff">How many paid kaimahi?</label>
+      <input type="number" id="paidStaff" class="w-full p-2 border border-accent rounded" min="0">
+      <label for="volunteers">How many volunteers?</label>
+      <input type="number" id="volunteers" class="w-full p-2 border border-accent rounded" min="0">
+      <button onclick="nextStep()" class="mt-4 bg-primary text-white px-6 py-2 rounded-md">Next</button>
+    </section>
 
-<section x-data="{ selectedPolicies: [] }" class="active">
-  <h2>Policies - Ngā Kaupapa</h2>
-  <p>Based on your answers, we recommend these policies. Add or remove any:</p>
-  
-  <div class="space-y-3">
-    <div class="flex items-center justify-between border p-3 rounded">
-      <label class="flex items-center">
-        <input type="checkbox" checked @change="selectedPolicies = selectedPolicies.includes('Governance Responsibilities') 
-          ? selectedPolicies.filter(p => p !== 'Governance Responsibilities') 
-          : [...selectedPolicies, 'Governance Responsibilities']">
-        <span class="ml-2">Governance Responsibilities</span>
-      </label>
+    <!-- Activities -->
+    <section class="step bg-white p-6 rounded-md shadow-sm border border-gray-200">
+      <h2 class="text-xl font-semibold mb-2">Ngā Mahi Motuhake – Activities</h2>
+      <p class="mb-2">Do you do any of the following?</p>
+      <div class="space-y-2">
+        <label><input type="checkbox" class="mr-2"> Work with tamariki or vulnerable people</label><br>
+        <label><input type="checkbox" class="mr-2"> Fundraise or hold raffles</label><br>
+        <label><input type="checkbox" class="mr-2"> Provide financial assistance</label><br>
+        <label><input type="checkbox" class="mr-2"> Use volunteers</label><br>
+      </div>
+      <button onclick="nextStep()" class="mt-4 bg-primary text-white px-6 py-2 rounded-md">Next</button>
+    </section>
+
+    <!-- Policies -->
+    <section class="step bg-white p-6 rounded-md shadow-sm border border-gray-200" x-data="{ selectedPolicies: [] }">
+      <h2 class="text-xl font-semibold mb-2">Ngā Kaupapa – Policies</h2>
+      <p>Based on your answers, we recommend these policies. Add or remove any:</p>
+      <div class="mt-4 space-y-3">
+        <template x-for="policy in ['Governance Responsibilities', 'Volunteer Support', 'Privacy & Information Use', 'Financial Management', 'Health & Safety']" :key="policy">
+          <div class="flex justify-between items-center border border-accent rounded p-3">
+            <label class="flex items-center space-x-2">
+              <input type="checkbox" :value="policy" x-model="selectedPolicies">
+              <span x-text="policy"></span>
+            </label>
+            <button 
+              @click="previewPolicy(policy, policy.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-') + '.txt')" 
+              class="text-primary underline hover:text-secondary">Preview</button>
+          </div>
+        </template>
+      </div>
+      <button onclick="nextStep()" class="mt-4 bg-primary text-white px-6 py-2 rounded-md">Next</button>
+    </section>
+
+    <!-- Download -->
+    <section class="step bg-white p-6 rounded-md shadow-sm border border-gray-200" x-data="{ downloading: false }">
+      <h2 class="text-xl font-semibold mb-4">Kua Rite – Your Policy Kete is Ready</h2>
+      <ul class="list-disc pl-5 mb-4" x-show="selectedPolicies.length">
+        <template x-for="policy in selectedPolicies" :key="policy">
+          <li x-text="policy"></li>
+        </template>
+      </ul>
       <button 
-        @click="previewPolicy('Governance Responsibilities', 'governance.txt')" 
-        class="text-primary hover:text-secondary underline">
-        Preview
+        @click="downloading = true; downloadDocx()" 
+        :disabled="downloading"
+        class="bg-primary text-white px-6 py-2 rounded-md w-full sm:w-auto">
+        <span x-show="!downloading">Download Kete</span>
+        <span x-show="downloading">Generating...</span>
       </button>
-    </div>
-    
-    <div class="flex items-center justify-between border p-3 rounded">
-      <label class="flex items-center">
-        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Volunteer Support') 
-          ? selectedPolicies.filter(p => p !== 'Volunteer Support') 
-          : [...selectedPolicies, 'Volunteer Support']">
-        <span class="ml-2">Volunteer Support</span>
-      </label>
-      <button 
-        @click="previewPolicy('Volunteer Support', 'volunteer.txt')" 
-        class="text-primary hover:text-secondary underline">
-        Preview
-      </button>
-    </div>
-    
-    <div class="flex items-center justify-between border p-3 rounded">
-      <label class="flex items-center">
-        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Privacy & Information Use') 
-          ? selectedPolicies.filter(p => p !== 'Privacy & Information Use') 
-          : [...selectedPolicies, 'Privacy & Information Use']">
-        <span class="ml-2">Privacy & Information Use</span>
-      </label>
-      <button 
-        @click="previewPolicy('Privacy & Information Use', 'privacy.txt')" 
-        class="text-primary hover:text-secondary underline">
-        Preview
-      </button>
-    </div>
-    
-    <div class="flex items-center justify-between border p-3 rounded">
-      <label class="flex items-center">
-        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Financial Management') 
-          ? selectedPolicies.filter(p => p !== 'Financial Management') 
-          : [...selectedPolicies, 'Financial Management']">
-        <span class="ml-2">Financial Management</span>
-      </label>
-      <button 
-        @click="previewPolicy('Financial Management', 'finance.txt')" 
-        class="text-primary hover:text-secondary underline">
-        Preview
-      </button>
-    </div>
-    
-    <div class="flex items-center justify-between border p-3 rounded">
-      <label class="flex items-center">
-        <input type="checkbox" @change="selectedPolicies = selectedPolicies.includes('Health & Safety') 
-          ? selectedPolicies.filter(p => p !== 'Health & Safety') 
-          : [...selectedPolicies, 'Health & Safety']">
-        <span class="ml-2">Health & Safety</span>
-      </label>
-      <button 
-        @click="previewPolicy('Health & Safety', 'health.txt')" 
-        class="text-primary hover:text-secondary underline">
-        Preview
-      </button>
+    </section>
+  </main>
+
+  <!-- Policy Preview Modal -->
+  <div x-data="{ open: false, policyContent: '', policyTitle: '' }" 
+       x-show="open" 
+       x-transition 
+       class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" 
+       style="display: none;"
+       @keydown.escape.window="open = false">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-xl w-full text-text">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold" x-text="policyTitle"></h3>
+        <button @click="open = false" class="text-accent hover:text-black text-lg">&times;</button>
+      </div>
+      <div x-html="policyContent" class="prose max-w-none"></div>
+      <div class="mt-6 text-right">
+        <button @click="open = false" class="bg-accent text-white px-4 py-2 rounded-md hover:bg-secondary">Close</button>
+      </div>
     </div>
   </div>
-  
-  <button onclick="nextStep()" class="mt-4 bg-primary text-white hover:bg-secondary px-4 py-2 rounded">Next</button>
-</section>
 
-<!-- Replace the final section in your index.html -->
-<section x-data="{ downloading: false }">
-  <h2 class="text-xl font-semibold mb-4">Your policy kete is ready – Kua rite tō kete</h2>
-  
-  <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg mb-6">
-    <h3 class="font-medium mb-2">Selected Policies:</h3>
-    <ul class="list-disc pl-5 mb-4">
-      <template x-for="policy in selectedPolicies" :key="policy">
-        <li x-text="policy"></li>
-      </template>
-    </ul>
-    
-    <div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <span>Your document will be generated as a Word file (.docx) </span>
-    </div>
-  </div>
-  
-  <p class="mb-6">Click below to download your policy kete as a Word document.</p>
-  
-  <button 
-    @click="downloading = true; downloadDocx()" 
-    class="bg-primary text-white hover:bg-secondary px-6 py-3 rounded-lg shadow-md flex items-center justify-center w-full sm:w-auto"
-    :class="{ 'opacity-50 cursor-not-allowed': downloading }"
-    :disabled="downloading">
-    <span x-show="!downloading">Download Kete</span>
-    <span x-show="downloading" class="flex items-center">
-      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      Generating...
-    </span>
-  </button>
-  
-  <div class="mt-8 border-t pt-6">
-    <button 
-      onclick="prevStep() " 
-      class="text-primary hover:text-secondary underline flex items-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-      Back to edit selections
-    </button>
-  </div>
-</section>
-
-<!-- Policy Preview Modal -->
-<div x-data="{ open: false, policyContent: '', policyTitle: '' }" 
-     x-show="open" 
-     x-transition
-     @keydown.escape.window="open = false"
-     class="fixed inset-0 z-50 overflow-y-auto" 
-     style="display: none;">
-  
-  <!-- Backdrop -->
-  <div class="fixed inset-0 bg-black bg-opacity-50" @click="open = false"></div>
-  
-  <!-- Modal -->
-  <div class="relative bg-white dark:bg-gray-800 max-w-lg mx-auto my-8 rounded-lg shadow-xl p-6">
-    <button @click="open = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-      &times; Close
-    </button>
-    
-    <h2 x-text="policyTitle" class="text-xl font-bold mb-4"></h2>
-    
-    <div x-html="policyContent" class="prose dark:prose-invert max-w-none"></div>
-    
-    <div class="mt-6 flex justify-between">
-      <button @click="open = false" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">
-        Close
-      </button>
-      <button class="bg-primary text-white hover:bg-secondary px-4 py-2 rounded">
-        Add to Kete
-      </button>
-    </div>
-  </div>
-</div>
-  
-<!-- DOCX + Custom Scripts -->
-<script src="https://unpkg.com/docx@7.7.0/build/index.js"></script>
-<script src="script.js"></script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/docx@7.7.0/build/index.js"></script>
+  <script src="script.js"></script>
 
 </body>
 </html>
