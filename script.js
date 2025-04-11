@@ -1,3 +1,38 @@
+// Policy preview functionality
+function previewPolicy(policyName, filename) {
+  // Get the Alpine.js component
+  const modal = document.querySelector('[x-data*="policyContent"]').__x;
+  
+  // Set the title
+  modal.$data.policyTitle = policyName;
+  
+  // Show loading state
+  modal.$data.policyContent = '<p>Loading policy content...</p>';
+  modal.$data.open = true;
+  
+  // Fetch the policy content
+  fetch(`templates/${filename}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to load policy');
+      }
+      return response.text();
+    })
+    .then(text => {
+      // Convert plain text to HTML with paragraphs
+      const htmlContent = text.split('\n')
+        .filter(line => line.trim() !== '')
+        .map(line => `<p>${line}</p>`)
+        .join('');
+      
+      modal.$data.policyContent = htmlContent;
+    })
+    .catch(error => {
+      modal.$data.policyContent = `<p class="text-red-500">Error loading policy: ${error.message}</p>`;
+    });
+}
+
+
 // Add this to your script.js file
 function downloadDocx() {
   // Show loading indicator
