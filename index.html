@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Tailwind CSS via CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Alpine.js via CDN -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<!-- Custom Tailwind configuration -->
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          primary: '#1f3b3f',
+          secondary: '#35595d',
+        }
+      }
+    }
+  }
+</script>
   <meta charset="UTF-8">
   <title>Policy Pakihi – Kete Builder</title>
   <link rel="stylesheet" href="styles.css">
@@ -146,6 +166,38 @@
   </div>
 </section>
 
+<!-- Policy Preview Modal -->
+<div x-data="{ open: false, policyContent: '', policyTitle: '' }" 
+     x-show="open" 
+     x-transition
+     @keydown.escape.window="open = false"
+     class="fixed inset-0 z-50 overflow-y-auto" 
+     style="display: none;">
+  
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black bg-opacity-50" @click="open = false"></div>
+  
+  <!-- Modal -->
+  <div class="relative bg-white dark:bg-gray-800 max-w-lg mx-auto my-8 rounded-lg shadow-xl p-6">
+    <button @click="open = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      &times; Close
+    </button>
+    
+    <h2 x-text="policyTitle" class="text-xl font-bold mb-4"></h2>
+    
+    <div x-html="policyContent" class="prose dark:prose-invert max-w-none"></div>
+    
+    <div class="mt-6 flex justify-between">
+      <button @click="open = false" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">
+        Close
+      </button>
+      <button class="bg-primary text-white hover:bg-secondary px-4 py-2 rounded">
+        Add to Kete
+      </button>
+    </div>
+  </div>
+</div>
+  
 <!-- DOCX + Custom Scripts -->
 <script src="https://unpkg.com/docx@7.7.0/build/index.js"></script>
 <script src="script.js"></script>
